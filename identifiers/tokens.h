@@ -40,11 +40,11 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 1 "expr.y" /* yacc.c:1909  */
+#line 1 "expr.y" /* yacc.c:1915  */
 
 	#include "ast.h"
 
-#line 48 "tokens.h" /* yacc.c:1909  */
+#line 48 "tokens.h" /* yacc.c:1915  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -85,13 +85,14 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 26 "expr.y" /* yacc.c:1909  */
+#line 26 "expr.y" /* yacc.c:1915  */
 
 	Statement *statement_t;
 	Expr *expr_t;
+	char *char_ptr_t;
 	int int_t;
 
-#line 95 "tokens.h" /* yacc.c:1909  */
+#line 96 "tokens.h" /* yacc.c:1915  */
 };
 
 typedef union YYSTYPE YYSTYPE;

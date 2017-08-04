@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <list>
+#include <map>
 using namespace std;
 
 // class AST
@@ -86,13 +87,13 @@ public:
 class VarExpr : public Expr
 {
 public:
-	VarExpr(int index)
+	VarExpr(char* index)
 	{
 		this->index = index;
 	}
 	~VarExpr();
 
-	int index;
+	char* index;
 
 	int eval();
 };
@@ -126,7 +127,7 @@ public:
 class AsignStatement : public Statement
 {
 public:
-	AsignStatement(int varIndex, Expr*expr){
+	AsignStatement(char* varIndex, Expr*expr){
 		this->varIndex=varIndex;
 		this->expr=expr;
 	}
@@ -134,8 +135,8 @@ public:
 
 	void exec();
 	
-	Expr*expr;
-	int varIndex;
+	Expr *expr;
+	char *varIndex;
 };
 
 class PrintStatement : public Statement

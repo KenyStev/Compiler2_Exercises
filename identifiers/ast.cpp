@@ -1,5 +1,5 @@
 #include "ast.h"
-int vars[8];
+map<char*,int> vars;
 
 int AddExpr::eval(){
 	int v1 = expr1->eval();
@@ -26,7 +26,10 @@ int DivExpr::eval(){
 }
 
 int VarExpr::eval(){
-	return vars[index];
+	if(vars.find(index) != vars.end())
+		return vars[index];
+	else
+		return 0;
 }
 
 int LogicalExpression::eval(){
@@ -44,7 +47,10 @@ int LogicalExpression::eval(){
 }
 
 void AsignStatement::exec(){
-	vars[varIndex] = expr->eval();
+	if(vars.find(varIndex)!=vars.end())
+		vars.insert(pair<char*,int>(varIndex,expr->eval()));
+	else
+		vars[varIndex] = expr->eval();
 }
 
 void PrintStatement::exec(){
