@@ -34,12 +34,6 @@
 ^"#"[ \t]*"include"[ \t]*\"	{ BEGIN(include); }
 "/*"	 					{ BEGIN(multiline_comment); }
 "//".*\n 					{ return TK_EOL; }
-"=="	 					{ return OP_EQUAL; }
-"!="	 					{ return OP_DISTINCT; }
-">="	 					{ return OP_GRATER_EQUAL_THAN; }
-"<="	 					{ return OP_LESS_EQUAL_THAN; }
-">"	 						{ return OP_GRATER_THAN; }
-"<"	 						{ return OP_LESS_THAN; }
 ","		 					{ return PT_COMMA; }
 "+"		 					{ return OP_ADD; }
 "-"		 					{ return OP_SUB; }
@@ -48,13 +42,9 @@
 "hex"		 					{ return KW_HEX; }
 "bin"		 					{ return KW_BIN; }
 "dec"		 					{ return KW_DEC; }
-"if"		 					{ return KW_IF; }
-"else"		 					{ return KW_ELSE; }
-"="		 	{ return OP_ASIGN; }
+"="		 	{ return OP_EQUAL; }
 ")"		 	{ return TK_RIGHT_PAR; }
 "("		 	{ return TK_LEFT_PAR; }
-"}"		 	{ return TK_RIGHT_CURLY_BRAKET; }
-"{"		 	{ return TK_LEFT_CURLY_BRAKET; }
 "print"	 	{ return KW_PRINT; }
 [0-9]+	 	{ yylval.int_t = atoi(yytext); return TK_NUMBER; }
 "$"[0-7] 	{ yylval.int_t = yytext[1] - '0'; return KW_VARINDEX; }

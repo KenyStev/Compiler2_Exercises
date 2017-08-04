@@ -55,28 +55,18 @@ extern int yydebug;
     OP_SUB = 259,
     OP_MUL = 260,
     OP_DIV = 261,
-    OP_ASIGN = 262,
+    OP_EQUAL = 262,
     TK_RIGHT_PAR = 263,
     TK_LEFT_PAR = 264,
-    TK_RIGHT_CURLY_BRAKET = 265,
-    TK_LEFT_CURLY_BRAKET = 266,
-    OP_EQUAL = 267,
-    OP_DISTINCT = 268,
-    OP_GRATER_EQUAL_THAN = 269,
-    OP_LESS_EQUAL_THAN = 270,
-    OP_GRATER_THAN = 271,
-    OP_LESS_THAN = 272,
-    KW_IF = 273,
-    KW_ELSE = 274,
-    KW_PRINT = 275,
-    KW_VARINDEX = 276,
-    TK_NUMBER = 277,
-    PT_COMMA = 278,
-    KW_HEX = 279,
-    KW_DEC = 280,
-    KW_BIN = 281,
-    TK_EOL = 282,
-    TK_ERROR = 283
+    KW_PRINT = 265,
+    KW_VARINDEX = 266,
+    TK_NUMBER = 267,
+    PT_COMMA = 268,
+    KW_HEX = 269,
+    KW_DEC = 270,
+    KW_BIN = 271,
+    TK_EOL = 272,
+    TK_ERROR = 273
   };
 #endif
 
@@ -85,13 +75,13 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 26 "expr.y" /* yacc.c:1909  */
+#line 19 "expr.y" /* yacc.c:1909  */
 
 	Statement *statement_t;
 	Expr *expr_t;
 	int int_t;
 
-#line 95 "tokens.h" /* yacc.c:1909  */
+#line 85 "tokens.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

@@ -107,22 +107,6 @@ protected:
 	
 };
 
-class LogicalExpression : public Expr
-{
-public:
-	LogicalExpression(Expr*expr1,int comparator, Expr * expr2){
-		this->expr1=expr1;
-		this->expr2=expr2;
-		this->comparator=comparator;
-	}
-	~LogicalExpression();
-	
-	Expr *expr1, *expr2;
-	int comparator;
-
-	int eval();
-};
-
 class AsignStatement : public Statement
 {
 public:
@@ -184,36 +168,6 @@ public:
 
 	list<Statement*> statementList;
 	
-};
-
-class IfStatement : public Statement
-{
-public:
-	IfStatement(Expr*expr, Statement*block, Statement*else_block){
-		this->expr = expr;
-		this->block = block;
-		this->else_block = else_block;
-	}
-	~IfStatement();
-	
-	Expr *expr;
-	Statement *block;
-	Statement *else_block;
-
-	void exec();
-};
-
-class ElseStatement : public Statement
-{
-public:
-	ElseStatement(Statement*block){
-		this->block=block;
-	}
-	~ElseStatement();
-	
-	Statement *block;
-
-	void exec();
 };
 
 #endif

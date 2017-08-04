@@ -5,13 +5,6 @@
 %{
 	#include <stdio.h>
 
-	#define EQUAL 1
-	#define DISTINCT 2
-	#define GRATER_EQUAL_THAN 3
-	#define LESS_EQUAL_THAN 4
-	#define GRATER_THAN 5
-	#define LESS_THAN 6
-
 	int yylex();
 	extern int yylineno;
 
@@ -29,14 +22,11 @@
 	int int_t;
 }
 
-%type <statement_t> input_src stmt asign print stmts if_stmt optional_else optional_block_stmt
-%type <expr_t> expr term factor logic_expression
-%type <int_t> print_format logic_operator
+%type <statement_t> input_src stmt asign print stmts
+%type <expr_t> expr term factor
+%type <int_t> print_format
 
-%token OP_ADD OP_SUB OP_MUL OP_DIV OP_ASIGN 
-%token TK_RIGHT_PAR TK_LEFT_PAR TK_RIGHT_CURLY_BRAKET TK_LEFT_CURLY_BRAKET
-%token OP_EQUAL OP_DISTINCT OP_GRATER_EQUAL_THAN OP_LESS_EQUAL_THAN OP_GRATER_THAN OP_LESS_THAN
-%token KW_IF KW_ELSE
+%token OP_ADD OP_SUB OP_MUL OP_DIV OP_EQUAL TK_RIGHT_PAR TK_LEFT_PAR 
 %token KW_PRINT 
 %token<int_t> KW_VARINDEX
 %token<int_t> TK_NUMBER
@@ -61,32 +51,9 @@ eofs: eofs TK_EOL
 
 stmt: asign					{ $$ = $1; }
 	| print					{ $$ = $1; }
-	| if_stmt
 ;
 
-if_stmt: KW_IF TK_LEFT_PAR logic_expression TK_RIGHT_PAR eofs optional_block_stmt eofs optional_else { $$ = new IfStatement($3,$6,$8); }
-;
-
-optional_else: KW_ELSE eofs optional_block_stmt { $$ = $3; }
-			|	{ $$ = NULL; }
-;
-
-optional_block_stmt: TK_LEFT_CURLY_BRAKET stmts TK_RIGHT_CURLY_BRAKET { $$ = $2; }
-					| stmt
-;
-
-logic_expression: expr logic_operator expr { $$ = new LogicalExpression($1,$2,$3); }
-;
-
-logic_operator:   OP_EQUAL 				{ $$ = EQUAL; }
-				| OP_DISTINCT			{ $$ = DISTINCT; }
-				| OP_GRATER_EQUAL_THAN	{ $$ = GRATER_EQUAL_THAN; }
-				| OP_LESS_EQUAL_THAN	{ $$ = LESS_EQUAL_THAN; }
-				| OP_GRATER_THAN 		{ $$ = GRATER_THAN; }
-				| OP_LESS_THAN 			{ $$ = LESS_THAN; }
-;
-
-asign: KW_VARINDEX OP_ASIGN expr	{ $$ = new AsignStatement($1,$3); }
+asign: KW_VARINDEX OP_EQUAL expr	{ $$ = new AsignStatement($1,$3); }
 ;
 
 print:    KW_PRINT expr PT_COMMA print_format			{ $$ = new PrintStatement($2,$4); }
