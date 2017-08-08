@@ -30,7 +30,7 @@ Grammar
    12 optional_else: KW_ELSE TK_EOL optional_block_stmt
    13              | %empty
 
-   14 optional_block_stmt: TK_LEFT_CURLY_BRAKET stmts TK_RIGHT_CURLY_BRAKET
+   14 optional_block_stmt: TK_LEFT_CURLY_BRAKET optional_eols stmts TK_RIGHT_CURLY_BRAKET TK_EOL
    15                    | stmt eols
 
    16 logic_expression: expr logic_operator expr
@@ -92,7 +92,7 @@ PT_COMMA (278) 24
 KW_HEX (279) 26
 KW_DEC (280) 28
 KW_BIN (281) 27
-TK_EOL (282) 3 4 5 11 12
+TK_EOL (282) 3 4 5 11 12 14
 TK_ERROR (283)
 
 
@@ -107,7 +107,7 @@ stmts (31)
 eols (32)
     on left: 4 5, on right: 4 6 15
 optional_eols (33)
-    on left: 6 7, on right: 2 3
+    on left: 6 7, on right: 2 3 14
 stmt (34)
     on left: 8 9 10, on right: 2 3 15
 if_stmt (35)
@@ -731,7 +731,7 @@ State 52
    10     | . if_stmt
    11 if_stmt: . KW_IF TK_LEFT_PAR logic_expression TK_RIGHT_PAR TK_EOL optional_block_stmt optional_else
    11        | KW_IF TK_LEFT_PAR logic_expression TK_RIGHT_PAR TK_EOL . optional_block_stmt optional_else
-   14 optional_block_stmt: . TK_LEFT_CURLY_BRAKET stmts TK_RIGHT_CURLY_BRAKET
+   14 optional_block_stmt: . TK_LEFT_CURLY_BRAKET optional_eols stmts TK_RIGHT_CURLY_BRAKET TK_EOL
    15                    | . stmt eols
    23 asign: . KW_VARINDEX OP_ASIGN expr
    24 print: . KW_PRINT expr PT_COMMA print_format
@@ -763,26 +763,18 @@ State 53
 
 State 54
 
-    2 stmts: . stmts stmt optional_eols
-    3      | . stmt TK_EOL optional_eols
-    8 stmt: . asign
-    9     | . print
-   10     | . if_stmt
-   11 if_stmt: . KW_IF TK_LEFT_PAR logic_expression TK_RIGHT_PAR TK_EOL optional_block_stmt optional_else
-   14 optional_block_stmt: TK_LEFT_CURLY_BRAKET . stmts TK_RIGHT_CURLY_BRAKET
-   23 asign: . KW_VARINDEX OP_ASIGN expr
-   24 print: . KW_PRINT expr PT_COMMA print_format
-   25      | . KW_PRINT expr
+    4 eols: . eols TK_EOL
+    5     | . TK_EOL
+    6 optional_eols: . eols
+    7              | . %empty  [KW_IF, KW_PRINT, KW_VARINDEX]
+   14 optional_block_stmt: TK_LEFT_CURLY_BRAKET . optional_eols stmts TK_RIGHT_CURLY_BRAKET TK_EOL
 
-    KW_IF        shift, and go to state 1
-    KW_PRINT     shift, and go to state 2
-    KW_VARINDEX  shift, and go to state 3
+    TK_EOL  shift, and go to state 30
 
-    stmts    go to state 57
-    stmt     go to state 6
-    if_stmt  go to state 7
-    asign    go to state 8
-    print    go to state 9
+    $default  reduce using rule 7 (optional_eols)
+
+    eols           go to state 31
+    optional_eols  go to state 57
 
 
 State 55
@@ -811,22 +803,23 @@ State 56
 
 State 57
 
-    2 stmts: stmts . stmt optional_eols
+    2 stmts: . stmts stmt optional_eols
+    3      | . stmt TK_EOL optional_eols
     8 stmt: . asign
     9     | . print
    10     | . if_stmt
    11 if_stmt: . KW_IF TK_LEFT_PAR logic_expression TK_RIGHT_PAR TK_EOL optional_block_stmt optional_else
-   14 optional_block_stmt: TK_LEFT_CURLY_BRAKET stmts . TK_RIGHT_CURLY_BRAKET
+   14 optional_block_stmt: TK_LEFT_CURLY_BRAKET optional_eols . stmts TK_RIGHT_CURLY_BRAKET TK_EOL
    23 asign: . KW_VARINDEX OP_ASIGN expr
    24 print: . KW_PRINT expr PT_COMMA print_format
    25      | . KW_PRINT expr
 
-    TK_RIGHT_CURLY_BRAKET  shift, and go to state 61
-    KW_IF                  shift, and go to state 1
-    KW_PRINT               shift, and go to state 2
-    KW_VARINDEX            shift, and go to state 3
+    KW_IF        shift, and go to state 1
+    KW_PRINT     shift, and go to state 2
+    KW_VARINDEX  shift, and go to state 3
 
-    stmt     go to state 19
+    stmts    go to state 61
+    stmt     go to state 6
     if_stmt  go to state 7
     asign    go to state 8
     print    go to state 9
@@ -859,9 +852,25 @@ State 60
 
 State 61
 
-   14 optional_block_stmt: TK_LEFT_CURLY_BRAKET stmts TK_RIGHT_CURLY_BRAKET .
+    2 stmts: stmts . stmt optional_eols
+    8 stmt: . asign
+    9     | . print
+   10     | . if_stmt
+   11 if_stmt: . KW_IF TK_LEFT_PAR logic_expression TK_RIGHT_PAR TK_EOL optional_block_stmt optional_else
+   14 optional_block_stmt: TK_LEFT_CURLY_BRAKET optional_eols stmts . TK_RIGHT_CURLY_BRAKET TK_EOL
+   23 asign: . KW_VARINDEX OP_ASIGN expr
+   24 print: . KW_PRINT expr PT_COMMA print_format
+   25      | . KW_PRINT expr
 
-    $default  reduce using rule 14 (optional_block_stmt)
+    TK_RIGHT_CURLY_BRAKET  shift, and go to state 63
+    KW_IF                  shift, and go to state 1
+    KW_PRINT               shift, and go to state 2
+    KW_VARINDEX            shift, and go to state 3
+
+    stmt     go to state 19
+    if_stmt  go to state 7
+    asign    go to state 8
+    print    go to state 9
 
 
 State 62
@@ -871,7 +880,7 @@ State 62
    10     | . if_stmt
    11 if_stmt: . KW_IF TK_LEFT_PAR logic_expression TK_RIGHT_PAR TK_EOL optional_block_stmt optional_else
    12 optional_else: KW_ELSE TK_EOL . optional_block_stmt
-   14 optional_block_stmt: . TK_LEFT_CURLY_BRAKET stmts TK_RIGHT_CURLY_BRAKET
+   14 optional_block_stmt: . TK_LEFT_CURLY_BRAKET optional_eols stmts TK_RIGHT_CURLY_BRAKET TK_EOL
    15                    | . stmt eols
    23 asign: . KW_VARINDEX OP_ASIGN expr
    24 print: . KW_PRINT expr PT_COMMA print_format
@@ -884,13 +893,27 @@ State 62
 
     stmt                 go to state 55
     if_stmt              go to state 7
-    optional_block_stmt  go to state 63
+    optional_block_stmt  go to state 64
     asign                go to state 8
     print                go to state 9
 
 
 State 63
 
+   14 optional_block_stmt: TK_LEFT_CURLY_BRAKET optional_eols stmts TK_RIGHT_CURLY_BRAKET . TK_EOL
+
+    TK_EOL  shift, and go to state 65
+
+
+State 64
+
    12 optional_else: KW_ELSE TK_EOL optional_block_stmt .
 
     $default  reduce using rule 12 (optional_else)
+
+
+State 65
+
+   14 optional_block_stmt: TK_LEFT_CURLY_BRAKET optional_eols stmts TK_RIGHT_CURLY_BRAKET TK_EOL .
+
+    $default  reduce using rule 14 (optional_block_stmt)

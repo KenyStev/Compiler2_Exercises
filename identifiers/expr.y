@@ -26,7 +26,7 @@
 %union {
 	Statement *statement_t;
 	Expr *expr_t;
-	char *char_ptr_t;
+	char *string_t;
 	int int_t;
 }
 
@@ -39,7 +39,7 @@
 %token OP_EQUAL OP_DISTINCT OP_GRATER_EQUAL_THAN OP_LESS_EQUAL_THAN OP_GRATER_THAN OP_LESS_THAN
 %token KW_IF KW_ELSE
 %token KW_PRINT 
-%token<char_ptr_t> KW_VARINDEX
+%token<string_t> KW_VARINDEX
 %token<int_t> TK_NUMBER
 %token PT_COMMA
 %token<int_t> KW_HEX KW_DEC KW_BIN
@@ -75,7 +75,7 @@ optional_else: KW_ELSE TK_EOL optional_block_stmt { $$ = $3; }
 			|	{ $$ = NULL; }
 ;
 
-optional_block_stmt: TK_LEFT_CURLY_BRAKET stmts TK_RIGHT_CURLY_BRAKET { $$ = $2; }
+optional_block_stmt: TK_LEFT_CURLY_BRAKET optional_eols stmts TK_RIGHT_CURLY_BRAKET TK_EOL { $$ = $3; }
 					| stmt eols
 ;
 

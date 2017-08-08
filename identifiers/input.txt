@@ -1,23 +1,13 @@
-hola0 = 10
-//Comentario 2
-hola7 = 20
+x = 100
 
-/*
- * Comentario de Bloque
- hola1 = 2
- print hola1
- */
+y = 50
 
-hola1 = (hola0 + hola7) * 5
-//#include "input2.txt"
-
-if (hola0 != 11)
-	print hola0
+if (y < 100)
+{
+	y = y * x
+}
 else
-	print hola7
-
-/*
-	print hola1 , dec
-	print (hola1 + 10) , bin
-	print (hola1 + 10) , hex
-*/
+{
+	print x
+}
+print y , dec

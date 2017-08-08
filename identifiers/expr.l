@@ -57,7 +57,7 @@
 "{"		 	{ return TK_LEFT_CURLY_BRAKET; }
 "print"	 	{ return KW_PRINT; }
 [0-9]+	 	{ yylval.int_t = atoi(yytext); return TK_NUMBER; }
-(_[A-Za-z]+)?[A-Za-z0-9_]* 	{ yylval.char_ptr_t = yytext; return KW_VARINDEX; }
+(_[A-Za-z]+)?[A-Za-z0-9_]* 	{ yylval.string_t = strdup(yytext); return KW_VARINDEX; }
 "\n"	 	{ return TK_EOL; }
 <INITIAL><<EOF>>	 	{ if(pop_file()!=0) yyterminate(); }
 .		 	{ return TK_ERROR; }

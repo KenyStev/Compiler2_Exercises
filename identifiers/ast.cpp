@@ -1,5 +1,5 @@
 #include "ast.h"
-map<char*,int> vars;
+map<string,int> vars;
 
 int AddExpr::eval(){
 	int v1 = expr1->eval();
@@ -47,10 +47,7 @@ int LogicalExpression::eval(){
 }
 
 void AsignStatement::exec(){
-	if(vars.find(varIndex)!=vars.end())
-		vars.insert(pair<char*,int>(varIndex,expr->eval()));
-	else
-		vars[varIndex] = expr->eval();
+	vars[varIndex] = expr->eval();
 }
 
 void PrintStatement::exec(){
@@ -70,6 +67,7 @@ void BlockStatement::exec(){
 
 void IfStatement::exec(){
 	int v = expr->eval();
+	// printf("if: %d\n", v);
 	if(v!=0)
 		block->exec();
 	else if(else_block!=NULL){
