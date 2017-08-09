@@ -21,7 +21,12 @@
 	}
 
 	#define YYERROR_VERBOSE 1
+	#define YYDEBUG 1
+
 %}
+
+%glr-parser
+%expect 1
 
 %union {
 	Statement *statement_t;
